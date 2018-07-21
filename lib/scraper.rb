@@ -5,30 +5,82 @@ require_relative './course.rb'
 
 class Scraper
 
-  # def get_page_governor_wiki
-  #   doc = Nokogiri::HTML(open("https://en.wikipedia.org/wiki/List_of_Governors_of_Texas#Governors_of_Texas"))
-  # end 
-  
   def get_page
     array_governors = []
     doc = Nokogiri::HTML(open("https://en.wikipedia.org/wiki/List_of_Governors_of_Texas#Governors_of_Texas"))
     title = doc.search(".wikitable")
     
     title[1].css("tr").each do |tr_list|
+      
       scraped_governor = {}
       small_list = tr_list.search("small")
-      scraped_governor[:name] = tr_list.css("td big").first.text
       scraped_governor[:profile_url] = "https://en.wikipedia.org#{tr_list.css("td big b a").attribute("href").value}"
-      scraped_governor[:born_death_date] = tr_list.css("td")[3].css("small").first.text  
+      
+      binding.pry
+      scraped_governor[:name] = tr_list.css("td big").first.text
+      scraped_governor[:born_death_date] = tr_list.css("td")[3].css("small").first.text
+      
       scraped_governor[:age] = small_list[1].text.gsub(/[()]/, "")
       scraped_governor[:term_in_office] = "#{tr_list.css("td")[4].children[0].text} - #{tr_list.css("td")[4].children[0].text.gsub(/[\n]/, '')}"
       scraped_governor[:party_affiliation] = tr_list.css("td")[5].text
       scraped_governor[:elected_year] = tr_list.css("td")[6].text
+      
       array_governors << scraped_governor
-    end
+      
+    end 
+    
     array_governors
-    binding.pry
   end 
+  
+  # def get_page
+  #   scraped_governors = {}
+  #   doc = Nokogiri::HTML(open("https://en.wikipedia.org/wiki/List_of_Governors_of_Texas#Governors_of_Texas"))
+  #   # title = doc.css(".wikitable tr:nth-child(2)").css("td:nth-child(4)").text
+  #   title = doc.css(".wikitable")
+  #   scraped_governors[:profile_url] ="https://en.wikipedia.org#{title.css("tr td big b a").attribute("href").value}"
+  #   scraped_governors[:born_death_date] = title.css("tr td small").first.text
+  #   small_list = title.css("tr td").search("small")
+  #   scraped_governors[:age] = small_list[1].text.gsub(/[()]/, "")
+  #   td_list = title.css(tr.search(td))
+  #   term_in_office = td_list[3].text
+  #   binding.pry
+  # end 
+  
+    # # title of the course
+    # title = doc.css(".post").first.css("h2").text
+  
+    # # schedule of the course 
+    # schedule = doc.css(".post").first.css(".date").text
+  
+    # # details of the course 
+    # description = doc.css(".post").first.css("p").text
+    #binding.pry
+  
+  
+  # def get_courses
+  #   self.get_page.css(".post")
+  # end 
+  
+  # def make_courses
+  #   self.get_courses.each do |post|
+  #     course = Course.new
+  #     course.title = post.css("h2").text
+  #     course.schedule = post.css(".date").text
+  #     course.description = post.css("p").text
+  #   end 
+  # end
+   def print_courses
+  #   self.make_courses
+  #   Course.all.each do |course|
+  #     if course.title
+  #       puts "Title: #{course.title}"
+  #       puts "Schedule: #{course.schedule}"
+  #       puts "Description: #{course.description}"
+  #     end
+  #   end
+  #   array_governors
+  #   binding.pry
+   end 
   
     
     # def get_page
@@ -48,8 +100,7 @@ class Scraper
     # end 
     
   
-end 
-    
+
   
     # # title of the course
     # title = doc.css(".post").first.css("h2").text
@@ -62,6 +113,7 @@ end
     #binding.pry
   
   
+
 #   def get_courses
 #     self.get_page.css(".post")
 #   end 
@@ -88,6 +140,10 @@ end
 # end 
 # Scraper.new.print_courses 
 
+
+
+end 
+Scraper.new.print_courses 
 
 
 
